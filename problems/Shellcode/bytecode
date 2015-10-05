@@ -1,0 +1,53 @@
+
+hello：     檔案格式 elf32-i386
+
+
+Disassembly of section .text:
+
+08048060 <.text>:
+ 8048060:	eb 45                	jmp    0x80480a7
+ 8048062:	31 c0                	xor    %eax,%eax
+ 8048064:	31 db                	xor    %ebx,%ebx
+ 8048066:	31 c9                	xor    %ecx,%ecx
+ 8048068:	31 d2                	xor    %edx,%edx
+ 804806a:	b0 04                	mov    $0x4,%al
+ 804806c:	b3 01                	mov    $0x1,%bl
+ 804806e:	59                   	pop    %ecx
+ 804806f:	b2 14                	mov    $0x14,%dl
+ 8048071:	cd 80                	int    $0x80
+ 8048073:	31 c0                	xor    %eax,%eax
+ 8048075:	b0 05                	mov    $0x5,%al
+ 8048077:	31 cb                	xor    %ecx,%ebx
+ 8048079:	31 c9                	xor    %ecx,%ecx
+ 804807b:	31 d2                	xor    %edx,%edx
+ 804807d:	cd 80                	int    $0x80
+ 804807f:	89 c6                	mov    %eax,%esi
+ 8048081:	89 f3                	mov    %esi,%ebx
+ 8048083:	b0 03                	mov    $0x3,%al
+ 8048085:	83 ec 01             	sub    $0x1,%esp
+ 8048088:	8d 0c 24             	lea    (%esp),%ecx
+ 804808b:	b2 01                	mov    $0x1,%dl
+ 804808d:	cd 80                	int    $0x80
+ 804808f:	31 db                	xor    %ebx,%ebx
+ 8048091:	39 d8                	cmp    %ebx,%eax
+ 8048093:	74 0a                	je     0x804809f
+ 8048095:	b0 04                	mov    $0x4,%al
+ 8048097:	b3 01                	mov    $0x1,%bl
+ 8048099:	b2 01                	mov    $0x1,%dl
+ 804809b:	cd 80                	int    $0x80
+ 804809d:	eb e2                	jmp    0x8048081
+ 804809f:	31 c0                	xor    %eax,%eax
+ 80480a1:	b0 01                	mov    $0x1,%al
+ 80480a3:	31 db                	xor    %ebx,%ebx
+ 80480a5:	cd 80                	int    $0x80
+ 80480a7:	e8 b6 ff ff ff       	call   0x8048062
+ 80480ac:	2f                   	das    
+ 80480ad:	68 6f 6d 65 2f       	push   $0x2f656d6f
+ 80480b2:	73 68                	jae    0x804811c
+ 80480b4:	65 6c                	gs insb (%dx),%es:(%edi)
+ 80480b6:	6c                   	insb   (%dx),%es:(%edi)
+ 80480b7:	63 6f 64             	arpl   %bp,0x64(%edi)
+ 80480ba:	65 2f                	gs das 
+ 80480bc:	66 6c                	data16 insb (%dx),%es:(%edi)
+ 80480be:	61                   	popa   
+ 80480bf:	67                   	addr16

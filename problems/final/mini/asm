@@ -1,0 +1,17 @@
+
+mini:     file format elf32-i386
+
+
+Disassembly of section .mini:
+
+08048080 <.mini>:
+ 8048080:	6a 03                	push   0x3
+ 8048082:	6a ff                	push   0xffffffff
+ 8048084:	6a 00                	push   0x0
+ 8048086:	e8 10 00 00 00       	call   0x804809b
+	...
+ 804809b:	59                   	pop    ecx
+ 804809c:	5b                   	pop    ebx
+ 804809d:	5a                   	pop    edx
+ 804809e:	58                   	pop    eax
+ 804809f:	cd 80                	int    0x80
